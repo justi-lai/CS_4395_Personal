@@ -20,7 +20,7 @@ class RNN(nn.Module):
     def __init__(self, input_dim, h):  # Add relevant parameters
         super(RNN, self).__init__()
         self.h = h
-        self.numOfLayer = 1
+        self.numOfLayer = 5
         self.rnn = nn.RNN(input_dim, h, self.numOfLayer, nonlinearity='tanh')
         self.W = nn.Linear(h, 5)
         self.softmax = nn.LogSoftmax(dim=1)
@@ -34,10 +34,7 @@ class RNN(nn.Module):
         output, hidden = self.rnn(inputs)
         
         # [to fill] obtain output layer representations
-        output_layer = self.W(output)
-
-        # [to fill] sum over output 
-        output_layer = torch.sum(output_layer, dim=0)
+        output_layer = self.W(hidden)
 
         # [to fill] obtain probability dist.
         predicted_vector = self.softmax(output_layer)
@@ -179,12 +176,12 @@ if __name__ == "__main__":
             stopping_condition=True
             print("Training done to avoid overfitting!")
             print("Best validation accuracy is:", last_validation_accuracy)
-            model.load_state_dict(torch.load('rnn_model.pt'))
+            model.load_state_dict(torch.load('rnn2_model.pt'))
             print("Best Model loaded!")
         else:
             last_validation_accuracy = validation_accuracy
             last_train_accuracy = trainning_accuracy
-            torch.save(model.state_dict(), 'rnn_model.pt')
+            torch.save(model.state_dict(), 'rnn2_model.pt')
             print("Model saved!")
 
         epoch += 1
